@@ -104,10 +104,10 @@ class Version extends Eloquent
      * Show the history of a version model, from a specific version.
      * If no version is provided, it will show a full history of the model from creation.
      *
-     * @param int|null $reviousversionid
+     * @param int $previousversionid
      * @return array
      */
-    public function getHistory(Version $previousversionid = 0)
+    public function getHistory($previousversionid = 0)
     {
         $history = array();
 
