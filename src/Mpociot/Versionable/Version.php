@@ -118,7 +118,7 @@ class Version extends Eloquent
             {
                 $content = $version->diff(Version::find($previousversionid));
             }
-            
+
             array_push($history, [
                 'id' => $version->version_id,
                 'timestamp' => $version->updated_at,
