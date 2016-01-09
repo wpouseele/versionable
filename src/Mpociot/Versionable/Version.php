@@ -100,4 +100,38 @@ class Version extends Eloquent
         return $diffArray;
     }
 
+    /**
+     * Show the history of a version model, from a specific version.
+     * If no version is provided, it will show a full history of the model from creation.
+     *
+     * @param int|null $reviousversionid
+     * @return array
+     */
+    public function getHistory(Version $previousversionid = 0)
+    {
+        $history = array();
+
+        foreach($this->versions as $version)
+        {
+            $content = ['Original model'];
+            if($previousversionid <> 0)
+            {
+                $content = $version->diff(Version::find($previousversionid));
+            }
+            
+            array_push($history, [
+                'id' => $version->version_id,
+                'timestamp' => $version->updated_at,
+                'content' => $content
+            ]);
+
+            $previousversionid = $version->version_id;
+        }
+
+        // sort the array reverse
+        rsort($history);
+
+        return $history;
+    }
+
 }
