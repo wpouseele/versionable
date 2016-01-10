@@ -125,6 +125,40 @@ trait VersionableTrait
     }
 
     /**
+     * Show the version history of a model, from a specific version id.
+     * If no version id is provided, it will show a full history of the model from creation.
+     *
+     * @param inf $versionid
+     * @return array
+     */
+    public function getHistory($versionid = 0)
+    {
+        $history = array();
+
+        foreach($this->getModel()->versions as $version)
+        {
+            $content = [''];
+            if($versionid <> 0)
+            {
+                $content = $version->diff(Version::find($versionid));
+            }
+
+            array_push($history, [
+                'id' => $version->version_id,
+                'timestamp' => $version->updated_at,
+                'content' => $content
+            ]);
+
+            $versionid = $version->version_id;
+        }
+
+        // sort the array reverse
+        rsort($history);
+
+        return $history;
+    }
+
+    /**
      * Pre save hook to determine if versioning is enabled and if we're updating
      * the model
      * @return void
